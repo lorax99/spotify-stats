@@ -1,7 +1,52 @@
-import "./App.css";
+import { useEffect, useState } from "react";
 
 function App() {
-  return <div>Hello World!</div>;
+  const CLIENT_ID = "490d03cd862842c388a9374a5ea66737";
+  const REDIRECT_URI = "http://127.0.0.1:5173";
+  const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
+  const RESPONSE_TYPE = "code";
+
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    let token = window.localStorage.getItem("token");
+
+    if (!token && hash) {
+      token = hash
+        .substring(1)
+        .split("&")
+        .find((elem) => elem.startsWith("code"))
+        .split("=")[1];
+
+      window.location.hash = "";
+      window.localStorage.setItem("token", token);
+    }
+
+    setToken(token);
+  }, []);
+
+  const logout = () => {
+    setToken("");
+    window.localStorage.removeItem("token");
+  };
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Spotify React</h1>
+        {!token ? (
+          <a
+            href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}
+          >
+            Login to Spotify
+          </a>
+        ) : (
+          <button onClick={logout}>Logout</button>
+        )}
+      </header>
+    </div>
+  );
 }
 
 export default App;
