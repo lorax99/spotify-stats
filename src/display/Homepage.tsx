@@ -11,7 +11,9 @@ export function Homepage() {
   useEffect(() => {
     const code = searchParams.get("code") ?? "";
     console.log("Code", code);
-    setCode(code);
+    if (code) {
+      setCode(code);
+    }
   }, [searchParams]);
 
   useEffect(() => {
