@@ -19,6 +19,7 @@ export async function redirectToAuthCodeFlow(clientId: string) {
   const link = `${AUTH_ENDPOINT}?${params.toString()}`;
   console.log("Redirecting to:", link);
   document.location = `${AUTH_ENDPOINT}?${params.toString()}`;
+  // TODO: change to <Navigate> inside <Homepage>
 }
 
 function generateCodeVerifier(length: number) {

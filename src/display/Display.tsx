@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { CLIENT_ID } from "../App";
 
 export function Display() {
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const [code, setCode] = useState("");
+  const code = searchParams.get("code") ?? "";
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const para = searchParams.get("code") ?? "";
-    console.log("Code", searchParams);
-    console.log("Para", para);
-    if (para) {
-      setCode(para);
-      console.log("successfully authenticated", para);
-    }
-  }, [searchParams]);
+    const doShit = async () => {
+      if (code) {
+        const accessToken = await getAccessToken(CLIENT_ID, code);
+        const profile = await fetchProfile(accessToken);
+        populateUI(profile);
+      } else {
+        navigate("/");
+      }
+    };
+    doShit();
+  }, []);
 
   return (
     <>
@@ -44,4 +48,17 @@ export function Display() {
       </section>
     </>
   );
+}
+
+async function getAccessToken(clientId: string, code: string) {
+  // TODO: Get access token for code
+  return "test";
+}
+
+async function fetchProfile(token: string): Promise<any> {
+  // TODO: Call Web API
+}
+
+function populateUI(profile: any) {
+  // TODO: Update UI with profile data
 }
