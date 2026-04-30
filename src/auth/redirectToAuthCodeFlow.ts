@@ -1,8 +1,8 @@
-export async function redirectToAuthCodeFlow(clientId: string) {
-  const REDIRECT_URI = "http://127.0.0.1:5173";
-  const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
-  const RESPONSE_TYPE = "code";
+const REDIRECT_URI = "http://127.0.0.1:5173/hello";
+const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
+const RESPONSE_TYPE = "code";
 
+export async function redirectToAuthCodeFlow(clientId: string) {
   const verifier = generateCodeVerifier(128);
   const challenge = await generateCodeChallenge(verifier);
   localStorage.setItem("verifier", verifier);
