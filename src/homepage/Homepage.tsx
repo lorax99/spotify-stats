@@ -1,8 +1,4 @@
-import { CLIENT_ID } from "../App";
-
-const REDIRECT_URI = "http://127.0.0.1:5173/hello";
-const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
-const RESPONSE_TYPE = "code";
+import { ACC_ENDPOINT, CLIENT_ID, REDIRECT_URI } from "../App";
 
 export function Homepage() {
   return (
@@ -22,16 +18,16 @@ export async function redirectToAuthCodeFlow(clientId: string) {
 
   const params = new URLSearchParams([
     ["client_id", clientId],
-    ["response_type", RESPONSE_TYPE],
+    ["response_type", "code"],
     ["redirect_uri", REDIRECT_URI],
     ["scope", "user-read-private user-read-email"],
     ["code_challenge_method", "S256"],
     ["code_challenge", challenge],
   ]);
 
-  const link = `${AUTH_ENDPOINT}?${params.toString()}`;
+  const link = `${ACC_ENDPOINT}/authorize?${params.toString()}`;
   console.log("Redirecting to:", link);
-  document.location = `${AUTH_ENDPOINT}?${params.toString()}`;
+  document.location = link;
   // TODO: change to <Navigate> inside <Homepage>
 }
 

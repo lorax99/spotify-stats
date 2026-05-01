@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { CLIENT_ID } from "../App";
+import { ACC_ENDPOINT, API_ENDPOINT, CLIENT_ID, REDIRECT_URI } from "../App";
 import { useNavigateToHome } from "../homepage/useNavigateToHome";
 
 export function Display() {
@@ -11,8 +11,9 @@ export function Display() {
   useEffect(() => {
     const doShit = async () => {
       if (code) {
-        const accessToken = await getAccessToken(CLIENT_ID, code);
+        const accessToken = await getAccessToken(CLIENT_ID, code, REDIRECT_URI);
         const profile = await fetchProfile(accessToken);
+        console.log(profile);
         populateUI(profile);
       } else {
         navigateToHome();
@@ -51,13 +52,38 @@ export function Display() {
   );
 }
 
-async function getAccessToken(clientId: string, code: string) {
-  // TODO: Get access token for code
-  return "test";
+async function getAccessToken(
+  clientId: string,
+  code: string,
+  redirect_uri: string,
+) {
+  const verifier = localStorage.getItem("verifier");
+  console.log("Verifier", verifier);
+
+  const params = new URLSearchParams();
+  params.append("client_id", clientId);
+  params.append("grant_type", "authorization_code");
+  params.append("code", code);
+  params.append("redirect_uri", redirect_uri);
+  params.append("code_verifier", verifier!);
+
+  const result = await fetch(`${ACC_ENDPOINT}/api/token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params,
+  });
+
+  const { access_token } = await result.json();
+  return access_token;
 }
 
 async function fetchProfile(token: string): Promise<any> {
-  // TODO: Call Web API
+  const result = await fetch(`${API_ENDPOINT}/v1/me`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  return await result.json();
 }
 
 function populateUI(profile: any) {
