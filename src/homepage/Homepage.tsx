@@ -1,6 +1,19 @@
+import { CLIENT_ID } from "../App";
+
 const REDIRECT_URI = "http://127.0.0.1:5173/hello";
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const RESPONSE_TYPE = "code";
+
+export function Homepage() {
+  return (
+    <>
+      <h1>Welcome to my landing page.</h1>
+      <button onClick={() => redirectToAuthCodeFlow(CLIENT_ID)}>
+        Authorize at Spotify
+      </button>
+    </>
+  );
+}
 
 export async function redirectToAuthCodeFlow(clientId: string) {
   const verifier = generateCodeVerifier(128);

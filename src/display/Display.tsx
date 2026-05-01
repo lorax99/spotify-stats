@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { CLIENT_ID } from "../App";
+import { useNavigateToHome } from "../homepage/useNavigateToHome";
 
 export function Display() {
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get("code") ?? "";
-  const navigate = useNavigate();
+  const { navigateToHome } = useNavigateToHome();
 
   useEffect(() => {
     const doShit = async () => {
@@ -14,7 +15,7 @@ export function Display() {
         const profile = await fetchProfile(accessToken);
         populateUI(profile);
       } else {
-        navigate("/");
+        navigateToHome();
       }
     };
     doShit();
