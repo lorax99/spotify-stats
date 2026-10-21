@@ -1,12 +1,16 @@
-import { REDIRECT_URI, ACC_ENDPOINT } from "../App";
+// Const
+export const CLIENT_ID = "490d03cd862842c388a9374a5ea66737";
+export const REDIRECT_URI = "http://127.0.0.1:5173/hello";
+export const ACC_ENDPOINT = "https://accounts.spotify.com";
+export const API_ENDPOINT = "https://api.spotify.com";
 
-export async function redirectToAuthCodeFlow(clientId: string) {
+export async function redirectToAuthCodeFlow() {
   const verifier = generateCodeVerifier(128);
   const challenge = await generateCodeChallenge(verifier);
   localStorage.setItem("verifier", verifier);
 
   const params = new URLSearchParams([
-    ["client_id", clientId],
+    ["client_id", CLIENT_ID],
     ["response_type", "code"],
     ["redirect_uri", REDIRECT_URI],
     ["scope", "user-read-private user-read-email user-top-read"],

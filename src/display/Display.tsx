@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { API_ENDPOINT, CLIENT_ID, REDIRECT_URI } from "../App";
+import { API_ENDPOINT } from "../auth/redirectToAuth";
 import { useNavigateToHome } from "../homepage/useNavigateToHome";
 import { getAccessToken } from "../auth/getAccessToken";
 
@@ -12,7 +12,7 @@ export function Display() {
   useEffect(() => {
     const doShit = async () => {
       if (code) {
-        const accessToken = await getAccessToken(CLIENT_ID, code, REDIRECT_URI);
+        const accessToken = await getAccessToken(code);
         const profile = await fetchProfile(accessToken);
         console.log(profile);
         populateUI(profile);
